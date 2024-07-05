@@ -1,24 +1,33 @@
 #include <gtest/gtest.h>
 #include "events.hpp"
 
-TEST(EventQueue, Constructor)
+using namespace SHAMS::Events;
+using namespace testing;
+
+class EventQueueTest : public Test
 {
-    SHAMS::Events::initialize();
-    SHAMS::Events::EventQueue eventQueue("TestQueue");
+protected:
+    void SetUp() override
+    {
+        initialize();
+    }
+};
+
+TEST_F(EventQueueTest, Constructor)
+{
+    EventQueue eventQueue("TestQueue");
     EXPECT_EQ(eventQueue.getName(), "TestQueue");
 }
 
-TEST(EventQueue, GetId)
+TEST_F(EventQueueTest, GetId)
 {
-    SHAMS::Events::initialize();
-    SHAMS::Events::EventQueue eventQueue("TestQueue");
+    EventQueue eventQueue("TestQueue");
     EXPECT_EQ(eventQueue.getId(), 0);
 }
 
-TEST(EventQueue, GetNextId)
+TEST_F(EventQueueTest, GetNextId)
 {
-    SHAMS::Events::initialize();
-    SHAMS::Events::EventQueue eventQueue("TestQueue");
-    SHAMS::Events::EventQueue eventQueue2("TestQueue2");
+    EventQueue eventQueue("TestQueue");
+    EventQueue eventQueue2("TestQueue2");
     EXPECT_EQ(eventQueue2.getId(), 1);
 }
