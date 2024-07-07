@@ -3,6 +3,7 @@
 #include <functional>
 #include "StaticBuffer.hpp"
 #include "delegate.hpp"
+#include <memory>
 
 namespace SHAMS
 {
@@ -15,7 +16,7 @@ namespace SHAMS
      * @tparam argType - The type of the argument.
      * @tparam capacity - The capacity of the event handlers.
      */
-    template <class argType, uint32_t capacity>
+    template <class argType = void, uint32_t capacity = 10>
     class Event final
     {
     public:
@@ -31,7 +32,7 @@ namespace SHAMS
         {
             for (const auto &handler : m_eventHandlers)
             {
-                handler(arg);
+                handler->onChange(arg);
             }
         }
 
@@ -41,9 +42,9 @@ namespace SHAMS
          * @param handler - The event handler to add.
          * @return Event& - The event object.
          */
-        Event &operator+=(DelegateBase &handler)
+        Event &operator+=(std::unique_ptr<ArgumentDelegate<argType>> &&handler)
         {
-            m_eventHandlers.insert(handler);
+            m_eventHandlers.insert(std::move(handler));
             return *this;
         }
 
@@ -53,14 +54,14 @@ namespace SHAMS
          * @param handler - The event handler to remove.
          * @return Event& - The event object.
          */
-        Event &operator-=(DelegateBase &handler)
+        Event &operator-=(std::unique_ptr<ArgumentDelegate<argType>> &&handler)
         {
             m_eventHandlers.remove(handler);
             return *this;
         }
 
     private:
-        StaticBuffer<DelegateBase, capacity> m_eventHandlers;
+        StaticBuffer<std::unique_ptr<ArgumentDelegate<argType>>, capacity> m_eventHandlers;
     };
 
     /**
@@ -72,7 +73,7 @@ namespace SHAMS
      * @tparam capacity - The capacity of the event handlers.
      */
     template <uint32_t capacity>
-    class Event<void, capacity> final
+    class Event<void, capacity>
     {
     public:
         Event() = default;
@@ -83,9 +84,9 @@ namespace SHAMS
          */
         void operator()()
         {
-            for (const auto &handler : m_eventHandlers)
+            for (auto &handler : m_eventHandlers)
             {
-                handler();
+                handler->onChange();
             }
         }
 
@@ -95,9 +96,9 @@ namespace SHAMS
          * @param handler - The event handler to add.
          * @return Event& - The event object.
          */
-        Event &operator+=(DelegateBase &handler)
+        Event &operator+=(std::unique_ptr<ArgumentDelegate<void>> &&handler)
         {
-            m_eventHandlers.insert(handler);
+            m_eventHandlers.insert(std::move(handler));
             return *this;
         }
 
@@ -107,20 +108,40 @@ namespace SHAMS
          * @param handler - The event handler to remove.
          * @return Event& - The event object.
          */
-        Event &operator-=(DelegateBase &handler)
+        Event &operator-=(std::unique_ptr<ArgumentDelegate<void>> &&handler)
         {
             m_eventHandlers.remove(handler);
             return *this;
         }
 
     private:
-        StaticBuffer<DelegateBase, capacity> m_eventHandlers;
+        StaticBuffer<std::unique_ptr<ArgumentDelegate<void>>, capacity> m_eventHandlers;
     };
 
-    template <typename argType>
-    FunctionDelegate<argType> bind(std::function<void(argType)> function)
+    namespace Functions
     {
-        return FunctionDelegate<argType>(function);
+        template <typename argType>
+        auto bind(std::function<void(argType)> function) -> std::unique_ptr<ArgumentDelegate<argType>>
+        {
+            return std::make_unique<FunctionDelegate<argType>>(function);
+        }
+
+        auto bind(std::function<void()> function) -> std::unique_ptr<ArgumentDelegate<void>>
+        {
+            return std::make_unique<FunctionDelegate<void>>(function);
+        }
+
+        template <typename argType, class classType>
+        auto bind(void (classType::*function)(argType), classType *instance) -> std::unique_ptr<ArgumentDelegate<argType>>
+        {
+            return std::make_unique<FunctionDelegate<argType>>(function);
+        }
+
+        template <class classType>
+        auto bind(void (classType::*function)(), classType *instance) -> std::unique_ptr<ArgumentDelegate<void>>
+        {
+            return std::make_unique<FunctionDelegate<void>>(function);
+        }
     }
 
 } // namespace SHAMS

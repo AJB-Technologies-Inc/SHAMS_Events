@@ -12,6 +12,7 @@ include(cmake/install_libs.cmake)
 add_subdirectory(Events/)
 
 # Enable testing and add the test directory
-if(SHAMS_UTIL_TESTING_ENABLED)
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    enable_testing()
     add_subdirectory(test)
 endif()

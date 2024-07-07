@@ -6,29 +6,16 @@ namespace SHAMS
 {
 
     /**
-     * @brief Base class for all delegates.
-     *
-     */
-    class DelegateBase
-    {
-    public:
-        DelegateBase() = default;
-        virtual ~DelegateBase() = default;
-    };
-
-    /**
      * @brief Delegate class that takes an argument.
      *
      * @tparam argType - The type of the argument.
      */
     template <typename argType>
-    class ArgumentDelegate : public DelegateBase
+    class ArgumentDelegate
     {
     public:
         ArgumentDelegate() = default;
         virtual ~ArgumentDelegate() = default;
-
-    protected:
         virtual void onChange(argType arg) = 0;
     };
 
@@ -38,13 +25,11 @@ namespace SHAMS
      * Specialization for void arguments, ie. no arguments.
      */
     template <>
-    class ArgumentDelegate<void> : public DelegateBase
+    class ArgumentDelegate<void>
     {
     public:
         ArgumentDelegate() = default;
         virtual ~ArgumentDelegate() = default;
-
-    protected:
         virtual void onChange() = 0;
     };
 

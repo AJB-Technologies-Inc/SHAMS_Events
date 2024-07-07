@@ -73,7 +73,10 @@
 			"variant": "cpp",
 			"format": "cpp",
 			"condition_variable": "cpp",
-			"mutex": "cpp"
+			"mutex": "cpp",
+			"bitset": "cpp",
+			"complex": "cpp",
+			"typeindex": "cpp"
 		}
 	}
 }
