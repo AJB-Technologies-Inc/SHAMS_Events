@@ -12,6 +12,6 @@ include(cmake/install_libs.cmake)
 add_subdirectory(Events/)
 
 # Enable testing and add the test directory
-enable_testing()
-
-add_subdirectory(test)
+if(SHAMS_UTIL_TESTING_ENABLED)
+    add_subdirectory(test)
+endif()

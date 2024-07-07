@@ -2,11 +2,20 @@
 
 #include <functional>
 #include "StaticBuffer.hpp"
-#include "eventHandler.hpp"
+#include "delegate.hpp"
 
 namespace SHAMS
 {
-    template <class argType = void, uint32_t capacity = 10>
+    /**
+     * @brief Event class that takes an argument.
+     *
+     * This class allows users to register delegates that take an argument.
+     * When the event is called, all the registered delegates are called with the given argument.
+     *
+     * @tparam argType - The type of the argument.
+     * @tparam capacity - The capacity of the event handlers.
+     */
+    template <class argType, uint32_t capacity>
     class Event final
     {
     public:
@@ -20,23 +29,9 @@ namespace SHAMS
          */
         void operator()(argType arg)
         {
-            for (uint32_t i = 0; i < m_eventHandlers.size(); i++)
+            for (const auto &handler : m_eventHandlers)
             {
-                // m_eventHandlers[i](arg);
-            }
-        }
-
-        /**
-         * @brief Calls the event handlers with no arguments.
-         *
-         * Overload for void arguments.
-         *
-         */
-        void operator()(void)
-        {
-            for (uint32_t i = 0; i < m_eventHandlers.size(); i++)
-            {
-                // m_eventHandlers[i]();
+                handler(arg);
             }
         }
 
@@ -46,21 +41,9 @@ namespace SHAMS
          * @param handler - The event handler to add.
          * @return Event& - The event object.
          */
-        Event &operator+=(eventHandler &handler)
+        Event &operator+=(DelegateBase &handler)
         {
             m_eventHandlers.insert(handler);
-            return *this;
-        }
-
-        /**
-         * @brief Adds an event function to the event.
-         *
-         * @param handler - The event function to add.
-         * @return Event& - The event object.
-         */
-        Event &operator+=(std::function<void(argType)> handler)
-        {
-            // m_eventHandlers.insert(handler); //TODO
             return *this;
         }
 
@@ -70,26 +53,74 @@ namespace SHAMS
          * @param handler - The event handler to remove.
          * @return Event& - The event object.
          */
-        Event &operator-=(eventHandler &handler)
+        Event &operator-=(DelegateBase &handler)
         {
             m_eventHandlers.remove(handler);
             return *this;
         }
 
+    private:
+        StaticBuffer<DelegateBase, capacity> m_eventHandlers;
+    };
+
+    /**
+     * @brief Event class that takes no arguments.
+     *
+     * This class allows users to register delegates that take no arguments.
+     * When the event is called, all the registered delegates are called.
+     *
+     * @tparam capacity - The capacity of the event handlers.
+     */
+    template <uint32_t capacity>
+    class Event<void, capacity> final
+    {
+    public:
+        Event() = default;
+        ~Event() = default;
+
         /**
-         * @brief Removes an event function from the event.
+         * @brief Calls the event handlers with the given arguments.
+         */
+        void operator()()
+        {
+            for (const auto &handler : m_eventHandlers)
+            {
+                handler();
+            }
+        }
+
+        /**
+         * @brief Adds an event handler to the event.
          *
-         * @param handler - The event function to remove.
+         * @param handler - The event handler to add.
          * @return Event& - The event object.
          */
-        Event &operator-=(std::function<void(argType)> handler)
+        Event &operator+=(DelegateBase &handler)
         {
-            // m_eventHandlers.remove(handler); //TODO
+            m_eventHandlers.insert(handler);
+            return *this;
+        }
+
+        /**
+         * @brief Removes an event handler from the event.
+         *
+         * @param handler - The event handler to remove.
+         * @return Event& - The event object.
+         */
+        Event &operator-=(DelegateBase &handler)
+        {
+            m_eventHandlers.remove(handler);
             return *this;
         }
 
     private:
-        StaticBuffer<eventHandler, capacity> m_eventHandlers;
+        StaticBuffer<DelegateBase, capacity> m_eventHandlers;
     };
+
+    template <typename argType>
+    FunctionDelegate<argType> bind(std::function<void(argType)> function)
+    {
+        return FunctionDelegate<argType>(function);
+    }
 
 } // namespace SHAMS

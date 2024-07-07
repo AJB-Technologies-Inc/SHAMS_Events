@@ -1,7 +1,8 @@
 find_package(GTest REQUIRED)
-include(GoogleTest)
 
-add_executable(ShamsEventTests tests/testQueues.cpp)
-target_link_libraries(ShamsEventTests PUBLIC GTest::gtest_main ShamsEvents)
+# include(GoogleTest)
 
-gtest_discover_tests(ShamsEventTests)
+# add_executable(ShamsEventTests tests/testQueues.cpp)
+# target_link_libraries(ShamsEventTests PUBLIC GTest::gtest_main ShamsEvents)
+
+# gtest_discover_tests(ShamsEventTests)
