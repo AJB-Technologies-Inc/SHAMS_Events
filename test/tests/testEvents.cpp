@@ -50,3 +50,51 @@ TEST(ShamsEvents, MultipleIntEvent)
     event(10);
     ASSERT_EQ(value, 30);
 }
+
+TEST(ShamsEvents, SingleVoidEventWithoutBind)
+{
+    Event event;
+    bool called = false;
+    event += [&called]()
+    { called = true; };
+    event();
+    ASSERT_TRUE(called);
+}
+
+TEST(ShamsEvents, SingleIntEventWithoutBind)
+{
+    Event<int> event;
+    int value = 0;
+    event += [&value](int arg)
+    { value = arg; };
+    event(10);
+    ASSERT_EQ(value, 10);
+}
+
+TEST(ShamsEvents, MultipleVoidEventsWitAndWithoutBind)
+{
+    Event event;
+    int count = 0;
+    auto func = [&count]()
+    { count++; };
+
+    event += Functions::bind(func);
+    event += func;
+    event += Functions::bind(func);
+    event();
+    ASSERT_EQ(count, 3);
+}
+
+TEST(ShamsEvents, MultipleIntEventsWitAndWithoutBind)
+{
+    Event<int> event;
+    int value = 0;
+    auto func = [&value](int arg)
+    { value += arg; };
+
+    event += Functions::bind<int>(func);
+    event += func;
+    event += Functions::bind<int>(func);
+    event(10);
+    ASSERT_EQ(value, 30);
+}
