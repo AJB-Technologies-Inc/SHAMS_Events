@@ -98,3 +98,38 @@ TEST(ShamsEvents, MultipleIntEventsWitAndWithoutBind)
     event(10);
     ASSERT_EQ(value, 30);
 }
+
+TEST(ShamsEvents, VerifyDefaultCapacity)
+{
+    Event<int> event;
+    ASSERT_EQ(event.maxCapacity(), 5);
+}
+
+TEST(ShamsEvents, VerifyChangingCapacity)
+{
+    Event<int, 10> event;
+    ASSERT_EQ(event.maxCapacity(), 10);
+}
+
+TEST(ShamsEvents, VerifyStartingSize)
+{
+    Event<int> event;
+    ASSERT_EQ(event.size(), 0);
+}
+
+TEST(ShamsEvents, VerifySize)
+{
+    Event<int> event;
+    event += [](int test){(void)test;};
+    ASSERT_EQ(event.size(), 1);
+}
+
+TEST(ShamsEvents, VerifyMaxSize)
+{
+    Event<int, 2> event;
+    auto func = [](int test){(void)test;};
+    event += func;
+    event += func;
+    event += func;
+    ASSERT_EQ(event.size(), 2);
+}

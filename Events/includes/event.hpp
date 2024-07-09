@@ -57,6 +57,16 @@ namespace SHAMS
         Event(Event &&) = delete;
         Event &operator=(Event &&) = delete;
 
+        uint32_t maxCapacity() const 
+        {
+            return capacity;
+        }
+
+        uint32_t size() const
+        {
+            return m_eventHandlers.size();
+        }
+
         /**
          * @brief Calls the event handlers with the given arguments.
          *
@@ -121,6 +131,16 @@ namespace SHAMS
         // Delete Move constructors
         Event(Event &&) = delete;
         Event &operator=(Event &&) = delete;
+
+        uint32_t maxCapacity() const 
+        {
+            return capacity;
+        }
+
+        uint32_t size() const
+        {
+            return m_eventHandlers.size();
+        }
 
         /**
          * @brief Calls the event handlers with the given arguments.
