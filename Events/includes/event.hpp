@@ -95,18 +95,6 @@ namespace SHAMS
             return *this;
         }
 
-        /**
-         * @brief Removes an event handler from the event.
-         *
-         * @param handler - The event handler to remove.
-         * @return Event& - The event object.
-         */
-        Event &operator-=(std::unique_ptr<ArgumentDelegate<argType>> &&handler)
-        {
-            m_eventHandlers.remove(handler);
-            return *this;
-        }
-
     private:
         StaticBuffer<std::unique_ptr<ArgumentDelegate<argType>>, capacity> m_eventHandlers;
     };
@@ -167,18 +155,6 @@ namespace SHAMS
         {
             auto &&handlerDelegate = Functions::bind(handler);
             m_eventHandlers.insert(std::move(handlerDelegate));
-            return *this;
-        }
-
-        /**
-         * @brief Removes an event handler from the event.
-         *
-         * @param handler - The event handler to remove.
-         * @return Event& - The event object.
-         */
-        Event &operator-=(std::unique_ptr<ArgumentDelegate<void>> &&handler)
-        {
-            m_eventHandlers.remove(handler);
             return *this;
         }
 
