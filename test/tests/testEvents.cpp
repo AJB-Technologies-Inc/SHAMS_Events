@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <shams/event.hpp>
+#include "event.hpp"
 
 using namespace SHAMS;
 
