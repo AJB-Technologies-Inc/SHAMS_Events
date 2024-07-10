@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "event.hpp"
+#include <shams/event.hpp>
 
 using namespace SHAMS;
 
@@ -120,14 +120,16 @@ TEST(ShamsEvents, VerifyStartingSize)
 TEST(ShamsEvents, VerifySize)
 {
     Event<int> event;
-    event += [](int test){(void)test;};
+    event += [](int test)
+    { (void)test; };
     ASSERT_EQ(event.size(), 1);
 }
 
 TEST(ShamsEvents, VerifyMaxSize)
 {
     Event<int, 2> event;
-    auto func = [](int test){(void)test;};
+    auto func = [](int test)
+    { (void)test; };
     event += func;
     event += func;
     event += func;
