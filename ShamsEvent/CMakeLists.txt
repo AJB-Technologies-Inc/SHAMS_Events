@@ -6,7 +6,7 @@ target_link_libraries(ShamsEvent
     Buffer
 )
 target_include_directories(ShamsEvent INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/includes>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/shams>
 )
 
@@ -19,7 +19,7 @@ install(TARGETS ShamsEvent
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/shams
 )
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/includes/
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/shams
     FILES_MATCHING PATTERN "*.hpp"
 )

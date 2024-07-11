@@ -99,6 +99,44 @@ TEST(ShamsEvents, MultipleIntEventsWitAndWithoutBind)
     ASSERT_EQ(value, 30);
 }
 
+class TestClass
+{
+
+public:
+    TestClass() : value(0) {}
+
+    void add(int arg)
+    {
+        value += arg;
+    }
+
+    void trigger()
+    {
+        called = true;
+    }
+
+    int value;
+    bool called;
+};
+
+TEST(ShamsEvents, MemberIntFunction)
+{
+    Event<int> event;
+    TestClass test;
+    event += Functions::bind<int>(&TestClass::add, &test);
+    event(10);
+    ASSERT_EQ(test.value, 10);
+}
+
+TEST(ShamsEvents, MemberVoidFunction)
+{
+    Event event;
+    TestClass test;
+    event += Functions::bind(&TestClass::trigger, &test);
+    event();
+    ASSERT_TRUE(test.called);
+}
+
 TEST(ShamsEvents, VerifyDefaultCapacity)
 {
     Event<int> event;

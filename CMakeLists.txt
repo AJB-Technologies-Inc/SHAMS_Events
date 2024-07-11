@@ -1,4 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
+
+
+if(ESP_PLATFORM)
+	# Build ArduinoJson as an ESP-IDF component
+	idf_component_register(INCLUDE_DIRS ShamsEvent)
+	return()
+endif()
+
+
 project(SHAMS_Events)
 
 # Specify the C++ standard
