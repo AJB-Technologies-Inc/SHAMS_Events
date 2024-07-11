@@ -21,13 +21,13 @@ namespace SHAMS::Functions
     template <typename argType, class classType>
     auto bind(void (classType::*function)(argType), classType *instance) -> std::unique_ptr<ArgumentDelegate<argType>>
     {
-        return std::make_unique<FunctionDelegate<argType>>(function);
+        return std::make_unique<MethodDelegate<argType, classType>>(instance, function);
     }
 
     template <class classType>
     auto bind(void (classType::*function)(), classType *instance) -> std::unique_ptr<ArgumentDelegate<void>>
     {
-        return std::make_unique<FunctionDelegate<void>>(function);
+        return std::make_unique<MethodDelegate<void, classType>>(instance, function);
     }
 } // namespace SHAMS::Functions
 
@@ -57,7 +57,7 @@ namespace SHAMS
         Event(Event &&) = delete;
         Event &operator=(Event &&) = delete;
 
-        uint32_t maxCapacity() const 
+        uint32_t maxCapacity() const
         {
             return capacity;
         }
@@ -132,7 +132,7 @@ namespace SHAMS
         Event(Event &&) = delete;
         Event &operator=(Event &&) = delete;
 
-        uint32_t maxCapacity() const 
+        uint32_t maxCapacity() const
         {
             return capacity;
         }
