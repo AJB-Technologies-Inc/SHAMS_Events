@@ -1,0 +1,26 @@
+{
+    "name": "Shams_Events",
+    "version": "1.0.0",
+    "description": "Simple to use event system for C++",
+    "keywords": "SHAMS",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/AJB-Technologies-Inc/SHAMS_Events.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Aaron Bromma",
+        "email": "aaron@ajb-tech.ca",
+        "url": "https://www.ajb-tech.ca/"
+      }
+    ],
+    "frameworks": "*",
+    "platforms": "*",
+    "dependencies": 
+    {
+      "Shams_Utilities": "https://github.com/AJB-Technologies-Inc/SHAMS_Utilities.git"
+    },
+    "headers": ["ShamsEvent/*.hpp"]
+  }

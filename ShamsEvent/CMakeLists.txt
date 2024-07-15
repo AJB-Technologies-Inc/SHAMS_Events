@@ -3,14 +3,14 @@ add_library(ShamsEvent INTERFACE)
 
 target_link_libraries(ShamsEvent
     INTERFACE
-    Buffer
+    SHAMS_Utilities
 )
 target_include_directories(ShamsEvent INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/shams>
 )
 
-# Install
+# Install and export the library
 install(TARGETS ShamsEvent
     EXPORT ShamsEventTargets
     ARCHIVE DESTINATION lib

@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-
-if(ESP_PLATFORM)
-	# Build ArduinoJson as an ESP-IDF component
-	idf_component_register(INCLUDE_DIRS ShamsEvent)
-	return()
-endif()
-
-
 project(SHAMS_Events)
 
 # Specify the C++ standard
@@ -22,6 +14,6 @@ add_subdirectory(ShamsEvent/)
 
 # Enable testing and add the test directory
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    enable_testing()
-    add_subdirectory(test)
+	enable_testing()
+	add_subdirectory(test)
 endif()

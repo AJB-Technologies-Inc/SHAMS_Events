@@ -1,8 +1,8 @@
 #pragma once
 
-#include <functional>
-#include "StaticBuffer.hpp"
 #include "delegate.hpp"
+#include "ShamsStaticBuffer.hpp"
+#include <functional>
 #include <memory>
 
 namespace SHAMS::Functions
