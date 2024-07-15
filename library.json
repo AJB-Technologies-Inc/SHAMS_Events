@@ -22,5 +22,8 @@
     {
       "Shams_Utilities": "https://github.com/AJB-Technologies-Inc/SHAMS_Utilities.git"
     },
-    "headers": ["ShamsEvent/*.hpp"]
+    "build": 
+    {
+      "includeDir": "ShamsEvent"
+    }
   }
