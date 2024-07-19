@@ -8,24 +8,24 @@
 namespace SHAMS::Functions
 {
     template <typename argType>
-    auto bind(std::function<void(argType)> function) -> std::unique_ptr<ArgumentDelegate<argType>>
+    inline auto bind(std::function<void(argType)> function) -> std::unique_ptr<ArgumentDelegate<argType>>
     {
         return std::make_unique<FunctionDelegate<argType>>(function);
     }
 
-    auto bind(std::function<void()> function) -> std::unique_ptr<ArgumentDelegate<void>>
+    inline auto bind(std::function<void()> function) -> std::unique_ptr<ArgumentDelegate<void>>
     {
         return std::make_unique<FunctionDelegate<void>>(function);
     }
 
     template <typename argType, class classType>
-    auto bind(void (classType::*function)(argType), classType *instance) -> std::unique_ptr<ArgumentDelegate<argType>>
+    inline auto bind(void (classType::*function)(argType), classType *instance) -> std::unique_ptr<ArgumentDelegate<argType>>
     {
         return std::make_unique<MethodDelegate<argType, classType>>(instance, function);
     }
 
     template <class classType>
-    auto bind(void (classType::*function)(), classType *instance) -> std::unique_ptr<ArgumentDelegate<void>>
+    inline auto bind(void (classType::*function)(), classType *instance) -> std::unique_ptr<ArgumentDelegate<void>>
     {
         return std::make_unique<MethodDelegate<void, classType>>(instance, function);
     }
